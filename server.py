@@ -3,7 +3,7 @@ from flask import jsonify
 from flask.views import MethodView
 
 
-app = flask.Flask('adv')
+adv = flask.Flask('adv')
 
 class AdvView(MethodView):
 
@@ -21,8 +21,8 @@ class AdvView(MethodView):
 
 adv_view = AdvView.as_view('adv_view')
 
-app.add_url_rule('/adv/<int:adv_id>', view_func=adv_view, methods=['GET', 'PATCH', 'DELETE'])
-app.add_url_rule('/adv/<int:adv_id>', view_func=adv_view, methods=['POST'])
+adv.add_url_rule('/adv/<int:adv_id>', view_func=adv_view, methods=['GET', 'PATCH', 'DELETE'])
+adv.add_url_rule('/adv/<int:adv_id>', view_func=adv_view, methods=['POST'])
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    adv.run(debug=True)
