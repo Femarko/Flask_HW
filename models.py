@@ -34,7 +34,7 @@ class Adv(Base):
     title: Mapped[str] = mapped_column(String(200), unique=False, index=True, nullable=False)
     description: Mapped[str] = mapped_column(index=True, unique=False, nullable=False)
     creation_date: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
-    author_id: Mapped[str] = mapped_column(foreign_key=AdvAuthor.id)
+    author_id: Mapped[str] = mapped_column(ForeignKey("adv_author.id"))
     author: Mapped["AdvAuthor"] = relationship(back_populates="advs")
 
 
