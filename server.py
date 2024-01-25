@@ -8,6 +8,18 @@ from models import Session, Adv
 adv = flask.Flask('adv')
 
 
+class HttpError(Exception):
+    def __init__(self, status_code: int, description: str):
+        self.status_code = status_code
+        self.description = description
+
+@adv.errorhandler(HttpError)
+def error_handler(error):
+    response = jsonify({"error": error.description})
+    response.status_code = error.status_code
+    return response
+
+
 @adv.before_request
 def before_request():
     session = Session()
@@ -20,6 +32,13 @@ def after_request(response: Response):
     return response
 
 
+def get_adv(adv_id: int):
+    adv = request.session.get(Adv, adv_id)
+    if adv is None:
+        raise HttpError(404, "advertisement not found")
+    return adv
+
+
 class AdvView(MethodView):
 
     @property
@@ -27,7 +46,16 @@ class AdvView(MethodView):
         return request.session
 
     def get(self, adv_id: int):
-        pass
+        adv = get_adv(adv_id)
+        return jsonify(
+            {
+                "id": adv.id,
+                "title": adv.title,
+                "description": adv.description,
+                "creation_date": adv.creation_date.isoformat(),
+                "author": adv.author
+            }
+        )
 
     def post(self):
         adv_data = request.json
