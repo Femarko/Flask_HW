@@ -24,6 +24,6 @@ class Adv(Base):
     creation_date: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     author: Mapped[str] = mapped_column(String(200))
 
-Base.metadata.drop_all(bind=engine/)
+Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
 
