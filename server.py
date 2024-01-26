@@ -2,24 +2,24 @@ import flask
 from flask import jsonify, request, Response
 from flask.views import MethodView
 from flask import Response
-
 from models import Session, Adv
+
 
 adv = flask.Flask('adv')
 
 
-# class HttpError(Exception):
-#     def __init__(self, status_code: int, description: str):
-#         self.status_code = status_code
-#         self.description = description
-#
-# @adv.errorhandler(HttpError)
-# def error_handler(error):
-#     response = jsonify({"error": error.description})
-#     response.status_code = error.status_code
-#     return response
-#
-#
+class HttpError(Exception):
+    def __init__(self, status_code: int, description: str):
+        self.status_code = status_code
+        self.description = description
+
+@adv.errorhandler(HttpError)
+def error_handler(error):
+    response = jsonify({"error": error.description})
+    response.status_code = error.status_code
+    return response
+
+
 @adv.before_request
 def before_request():
     session = Session()
