@@ -32,11 +32,11 @@ def after_request(response: Response):
     return response
 #
 #
-# def get_adv(adv_id: int):
-#     adv = request.session.get(Adv, adv_id)
-#     if adv is None:
-#         raise HttpError(404, "advertisement not found")
-#     return adv
+def get_adv(adv_id: int):
+    adv = request.session.get(Adv, adv_id)
+    if adv is None:
+        raise HttpError(404, "advertisement not found")
+    return adv
 #
 #
 class AdvView(MethodView):
@@ -45,29 +45,30 @@ class AdvView(MethodView):
     def session(self) -> Session:
         return request.session
 
-    # def get(self, adv_id: int):
-    #     adv = get_adv(adv_id)
-    #     return jsonify(
-    #         {
-    #             "id": adv.id,
-    #             "title": adv.title,
-    #             "description": adv.description,
-    #             "creation_date": adv.creation_date.isoformat(),
-    #             "author": adv.author
-    #         }
-    #     )
     def get(self, adv_id: int):
-        with Session() as session:
-            adv = session.get(Adv, adv_id)
-            return jsonify(
-                {
-                    "id": adv.id,
-                    "title": adv.title,
-                    "description": adv.description,
-                    "creation_date": adv.creation_date.isoformat(),
-                    "author": adv.author
-                }
-            )
+        adv = get_adv(adv_id)
+        return jsonify(
+            {
+                "id": adv.id,
+                "title": adv.title,
+                "description": adv.description,
+                "creation_date": adv.creation_date.isoformat(),
+                "author": adv.author
+            }
+        )
+
+    # def get(self, adv_id: int):
+    #     with Session() as session:
+    #         adv = session.get(Adv, adv_id)
+    #         return jsonify(
+    #             {
+    #                 "id": adv.id,
+    #                 "title": adv.title,
+    #                 "description": adv.description,
+    #                 "creation_date": adv.creation_date.isoformat(),
+    #                 "author": adv.author
+    #             }
+    #         )
 
 
 
