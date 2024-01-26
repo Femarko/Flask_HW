@@ -20,16 +20,16 @@ adv = flask.Flask('adv')
 #     return response
 #
 #
-# @adv.before_request
-# def before_request():
-#     session = Session()
-#     request.session = session
-#
-#
-# @adv.after_request
-# def after_request(response: Response):
-#     request.session.close()
-#     return response
+@adv.before_request
+def before_request():
+    session = Session()
+    request.session = session
+
+
+@adv.after_request
+def after_request(response: Response):
+    request.session.close()
+    return response
 #
 #
 # def get_adv(adv_id: int):
@@ -41,10 +41,10 @@ adv = flask.Flask('adv')
 #
 class AdvView(MethodView):
 
-    # @property
-    # def session(self) -> Session:
-    #     return request.session
-    #
+    @property
+    def session(self) -> Session:
+        return request.session
+
     # def get(self, adv_id: int):
     #     adv = get_adv(adv_id)
     #     return jsonify(
@@ -71,20 +71,20 @@ class AdvView(MethodView):
 
 
 
-    # def post(self):
-    #     adv_data = request.json
-    #     new_adv = Adv(**adv_data)
-    #     self.session.add(new_adv)
-    #     self.session.commit()
-    #     return jsonify({'id': new_adv.id})
-
     def post(self):
         adv_data = request.json
-        with Session() as session:
-            new_adv = Adv(**adv_data)
-            session.add(new_adv)
-            session.commit()
-            return jsonify({'id': new_adv.id})
+        new_adv = Adv(**adv_data)
+        self.session.add(new_adv)
+        self.session.commit()
+        return jsonify({'id': new_adv.id})
+
+    # def post(self):
+    #     adv_data = request.json
+    #     with Session() as session:
+    #         new_adv = Adv(**adv_data)
+    #         session.add(new_adv)
+    #         session.commit()
+    #         return jsonify({'id': new_adv.id})
 
     def patch(self, adv_id: int):
         pass
