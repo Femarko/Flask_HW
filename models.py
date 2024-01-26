@@ -1,11 +1,12 @@
 from datetime import datetime
 from typing import List
+from config import postgres_dsn
 
 from sqlalchemy import create_engine, Integer, String, DateTime, func, ForeignKey
 from sqlalchemy.orm import sessionmaker, DeclarativeBase, Mapped, mapped_column, relationship
 
-POSTGRES_DSN = f"postgresql://adv:secret@127.0.0.1:5431/adv"
-engine = create_engine(POSTGRES_DSN)
+POSTGRES_DSN = postgres_dsn
+engine = create_engine(POSTGRES_DSN, echo=True)
 
 Session = sessionmaker(bind=engine)
 
