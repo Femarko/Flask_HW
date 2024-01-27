@@ -67,20 +67,6 @@ class AdvView(MethodView):
             }
         )
 
-    # def get(self, adv_id: int):
-    #     with Session() as session:
-    #         adv = session.get(Adv, adv_id)
-    #         return jsonify(
-    #             {
-    #                 "id": adv.id,
-    #                 "title": adv.title,
-    #                 "description": adv.description,
-    #                 "creation_date": adv.creation_date.isoformat(),
-    #                 "author": adv.author
-    #             }
-    #         )
-
-
 
     def post(self):
         adv_data = request.json
@@ -89,13 +75,6 @@ class AdvView(MethodView):
         self.session.commit()
         return jsonify({'id': new_adv.id})
 
-    # def post(self):
-    #     adv_data = request.json
-    #     with Session() as session:
-    #         new_adv = Adv(**adv_data)
-    #         session.add(new_adv)
-    #         session.commit()
-    #         return jsonify({'id': new_adv.id})
 
     def patch(self, adv_id: int):
         adv = get_adv(adv_id)
@@ -105,11 +84,14 @@ class AdvView(MethodView):
         adv = add_adv(adv)
         return jsonify(
             {
-                "id": adv.id,
-                "title": adv.title,
-                "description": adv.description,
-                "creation_date": adv.creation_date.isoformat(),
-                "author": adv.author
+                "modified data":
+                    {
+                    "id": adv.id,
+                    "title": adv.title,
+                    "description": adv.description,
+                    "creation_date": adv.creation_date.isoformat(),
+                    "author": adv.author
+                    }
             }
         )
 
