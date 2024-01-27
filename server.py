@@ -115,8 +115,17 @@ class AdvView(MethodView):
 
 
     def delete(self, adv_id: int):
-        pass
-
+        adv = get_adv(adv_id)
+        adv_params = {
+            "id": adv.id,
+            "title": adv.title,
+            "description": adv.description,
+            "creation_date": adv.creation_date,
+            "author": adv.author
+            }
+        self.session.delete(adv)
+        self.session.commit()
+        return jsonify({"deleted": adv_params})
 
 
 adv_view = AdvView.as_view("adv_view")
