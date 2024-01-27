@@ -3,6 +3,7 @@ from flask import jsonify, request, Response
 from flask.views import MethodView
 from flask import Response
 from models import Session, Adv
+from sqlalchemy.exc import IntegrityError
 
 
 adv = flask.Flask('adv')
@@ -30,15 +31,24 @@ def before_request():
 def after_request(response: Response):
     request.session.close()
     return response
-#
-#
+
+
 def get_adv(adv_id: int):
     adv = request.session.get(Adv, adv_id)
     if adv is None:
         raise HttpError(404, "advertisement not found")
     return adv
-#
-#
+
+
+def add_adv(adv: Adv):
+    try:
+        request.session.add(adv)
+        request.session.commit()
+    except IntegrityError as err:
+        raise HttpError(409,"advertisement already exists")
+    return adv
+
+
 class AdvView(MethodView):
 
     @property
@@ -88,7 +98,21 @@ class AdvView(MethodView):
     #         return jsonify({'id': new_adv.id})
 
     def patch(self, adv_id: int):
-        pass
+        adv = get_adv(adv_id)
+        adv_data = request.json
+        for key, value in adv_data.items():
+            setattr(adv, key, value)
+        adv = add_adv(adv)
+        return jsonify(
+            {
+                "id": adv.id,
+                "title": adv.title,
+                "description": adv.description,
+                "creation_date": adv.creation_date.isoformat(),
+                "author": adv.author
+            }
+        )
+
 
     def delete(self, adv_id: int):
         pass

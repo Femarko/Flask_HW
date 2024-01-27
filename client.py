@@ -9,7 +9,16 @@ import requests
 #     }
 # )
 
-response = requests.get('http://127.0.0.1:5000/adv/10')
+# response = requests.get('http://127.0.0.1:5000/adv/3')
+
+response = requests.patch(
+    'http://127.0.0.1:5000/adv/5',
+    json={
+        "title": "new title 5",
+        "description": "new description 5",
+        "author": "new author 5"
+    }
+)
 
 print(response.status_code)
 print(response.text)
