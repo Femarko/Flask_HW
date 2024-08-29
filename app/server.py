@@ -6,9 +6,7 @@ from flask import Response
 from app.error_handler import HttpError
 from models import Session, Adv
 from sqlalchemy.exc import IntegrityError
-
-adv = flask.Flask('adv')
-
+from __init__ import adv
 
 @adv.before_request
 def before_request():

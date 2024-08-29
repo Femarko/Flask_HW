@@ -1,6 +1,6 @@
 from flask import jsonify
 
-from app.server import adv
+from __init__ import adv
 
 
 class HttpError(Exception):
