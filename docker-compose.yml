@@ -3,9 +3,26 @@ services:
 
   db:
     image: postgres:14.3-alpine3.15
+    env_file:
+      - .env
     ports:
       - "5431:5432"
-    environment:
-      POSTGRES_USER: adv
-      POSTGRES_PASSWORD: secret
-      POSTGRES_DB: adv
+    healthcheck:
+      test: sh -c "pg_isready -U adv -d adv"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
+
+  pg_admin:
+    image: dpage/pgadmin4:latest
+    env_file:
+      - .env
+    ports:
+      - "5051:80"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 2G
