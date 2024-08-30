@@ -4,9 +4,12 @@ from flask.views import MethodView
 from flask import Response
 
 from app.error_handler import HttpError
-from models import Session, Adv
+from app.db import Session
+from app.models import Adv
 from sqlalchemy.exc import IntegrityError
-from __init__ import adv
+
+from app import adv
+
 
 @adv.before_request
 def before_request():
@@ -94,5 +97,3 @@ class AdvView(MethodView):
         return jsonify({"deleted": adv_params})
 
 
-if __name__ == "__main__":
-    adv.run(debug=True)
