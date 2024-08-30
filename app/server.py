@@ -62,7 +62,7 @@ class AdvView(MethodView):
         new_adv = Adv(**adv_data)
         self.session.add(new_adv)
         self.session.commit()
-        return jsonify({'id': new_adv.id})
+        return jsonify({'id': new_adv.id}), 201
 
     def patch(self, adv_id: int):
         adv = get_adv(adv_id)
@@ -70,18 +70,14 @@ class AdvView(MethodView):
         for key, value in adv_data.items():
             setattr(adv, key, value)
         adv = add_adv(adv)
-        return jsonify(
-            {
-                "modified data":
-                    {
-                        "id": adv.id,
-                        "title": adv.title,
-                        "description": adv.description,
-                        "creation_date": adv.creation_date.isoformat(),
-                        "author": adv.author
-                    }
-            }
-        )
+        modified_adv = {
+            "id": adv.id,
+            "title": adv.title,
+            "description": adv.description,
+            "creation_date": adv.creation_date.isoformat(),
+            "author": adv.author
+        }
+        return jsonify({"modified_advertisement": modified_adv}), 200
 
     def delete(self, adv_id: int):
         adv = get_adv(adv_id)
@@ -94,6 +90,6 @@ class AdvView(MethodView):
         }
         self.session.delete(adv)
         self.session.commit()
-        return jsonify({"deleted": adv_params})
+        return jsonify({"deleted": adv_params}), 200
 
 
