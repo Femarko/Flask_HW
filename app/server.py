@@ -1,13 +1,14 @@
 import flask
+import pydantic
 from flask import jsonify, request, Response
 from flask.views import MethodView
 from flask import Response
+from sqlalchemy.exc import IntegrityError
 
 from app.error_handler import HttpError
 from app.db import Session
 from app.models import Adv
-from sqlalchemy.exc import IntegrityError
-
+from app.schema import CreateAdv
 from app import adv
 
 
@@ -39,6 +40,16 @@ def add_adv(adv: Adv):
     return adv
 
 
+def validate_data(model, data):
+    try:
+        return model.model_validate(data).model_dump(exclude_unset=True)
+    except pydantic.ValidationError as err:
+        error = err.errors()[0]
+        error.pop("ctx", None)
+        raise HttpError(400, error)
+
+
+
 class AdvView(MethodView):
 
     @property
@@ -58,7 +69,7 @@ class AdvView(MethodView):
         )
 
     def post(self):
-        adv_data = request.json
+        adv_data = validate_data(model=CreateAdv, data=request.json)
         new_adv = Adv(**adv_data)
         self.session.add(new_adv)
         self.session.commit()
