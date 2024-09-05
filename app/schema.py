@@ -1,5 +1,4 @@
 import pydantic
-from typing import Optional
 
 
 class CreateAdv(pydantic.BaseModel):
