@@ -5,3 +5,4 @@ env_flask_hw/
 __pycache__/
 config.py
 .env
+client.py
