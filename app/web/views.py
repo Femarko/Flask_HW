@@ -2,8 +2,6 @@ from flask import jsonify, request, Response
 from flask.views import MethodView
 
 # from app.validation.data_validation import validate_data
-from app.data.db import storage_interface
-from app.validation.validation_models import CreateAdv
 from app import service
 
 

@@ -2,7 +2,7 @@ from typing import TypeVar
 
 from sqlalchemy.exc import IntegrityError
 
-from app.data.db import db_models
+from app.db import db_models
 from app.error_handler import HttpError
 from app.type_hints import SQLAlchemySession
 
