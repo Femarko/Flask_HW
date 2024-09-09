@@ -15,5 +15,6 @@ def validate_params_to_edit(data_to_validate: Any):
 def save(validated_data: dict):
     return storage_interface.save(validated_data)
 
+
 def edit(validated_data: dict):
-    return s
+    pass
