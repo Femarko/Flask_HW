@@ -7,8 +7,8 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 class Base(DeclarativeBase):
     pass
 
-class Adv(Base):
 
+class Adv(Base):
     __tablename__ = 'adv'
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -16,7 +16,3 @@ class Adv(Base):
     description: Mapped[str] = mapped_column(index=True, unique=False, nullable=False)
     creation_date: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     author: Mapped[str] = mapped_column(String(200))
-
-
-
-

@@ -3,9 +3,9 @@ import requests
 response = requests.post(
     'http://127.0.0.1:5000/adv',
     json={
-        "title": "three",
-        "description": "three",
-        "author": "three"
+        "title": "nine",
+        "description": "nine",
+        "author": "nine"
     }
 )
 

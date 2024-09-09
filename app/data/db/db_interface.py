@@ -28,12 +28,13 @@ class StorageInterface:
     def __init__(self, session: SQLAlchemySession):
         self.session = session
 
-    def save(self, object_to_save: DBModel):
+    def save(self, validated_data: dict) -> int:
+        object_to_save: DBModel = db_models.Adv(**validated_data)
         try:
             self.session.add(object_to_save)
             self.session.commit()
-            new_adv_id = object_to_save.id
-            return new_adv_id
+            saved_object_id = object_to_save.id
+            return saved_object_id
         except IntegrityError:
             raise HttpError(409, "advertisement already exists")
         finally:
