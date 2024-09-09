@@ -3,16 +3,16 @@ import requests
 response = requests.post(
     'http://127.0.0.1:5000/adv',
     json={
-        "title": "smth new",
-        "description": "smth new",
-        "author": "smth new"
+        "title": "three",
+        "description": "three",
+        "author": "three"
     }
 )
 
-# response = requests.get('http://127.0.0.1:5000/adv/17')
+# response = requests.get('http://127.0.0.1:5000/adv/1')
 
 # response = requests.patch(
-#     'http://127.0.0.1:5000/adv/16',
+#     'http://127.0.0.1:5000/adv/1',
 #     json={
 #         "title": "totally new",
 #         # "description": "some moddescription",
@@ -20,7 +20,7 @@ response = requests.post(
 #     }
 # )
 
-# response = requests.delete('http://127.0.0.1:5000/adv/14')
+# response = requests.delete('http://127.0.0.1:5000/adv/1')
 
 
 print(response.status_code)

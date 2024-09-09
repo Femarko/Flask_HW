@@ -11,5 +11,3 @@ class EditAdv(pydantic.BaseModel):
     title: str | None = None
     description: str | None = None
     author: str | None = None
-
-

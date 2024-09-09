@@ -1,7 +1,7 @@
 from datetime import datetime
-from sqlalchemy import create_engine, Integer, String, DateTime, func, ForeignKey
-from sqlalchemy.orm import sessionmaker, DeclarativeBase, Mapped, mapped_column, relationship
 
+from sqlalchemy import String, DateTime, func
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 class Base(DeclarativeBase):
@@ -16,5 +16,7 @@ class Adv(Base):
     description: Mapped[str] = mapped_column(index=True, unique=False, nullable=False)
     creation_date: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     author: Mapped[str] = mapped_column(String(200))
+
+
 
 

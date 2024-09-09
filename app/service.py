@@ -1,46 +1,33 @@
-import flask, sqlalchemy
-from flask import request, Response
-from sqlalchemy.exc import IntegrityError, DatabaseError
+from typing import Any
 
-from app import adv, db, models, error_handler
-from app.db import Session
-from app.error_handler import HttpError
-from app.models import Adv
-from app.type_hints import SQLAlchemySession
+# from app.data.db.db_interface import get_adv
+import flask
 
-
-@adv.before_request
-def before_request() -> None:
-    session: SQLAlchemySession = Session()
-    request.session = session
+from app.data.schema_and_validation import schema
+from app.validation import params_validator_to_create, params_validator_to_edit
+from app.data.db import storage_interface
+from app.data.db import db_models
 
 
-@adv.after_request
-def after_request(response: Response) -> Response:
-    request.session.close()
-    return response
+# def get_one_adv(adv_id: int) -> Adv:
+#     return get_adv(adv_id)
+#
+#
+# def create_new_adv(adv_params: dict) -> Adv.id:
+#     return add_adv(adv_params)
+#
+#
+# def update_adv(adv: Adv) -> Adv:
+#     return add_adv(adv)
+
+def validate_params_to_create(data_to_validate: Any):
+    return params_validator_to_create.validate(data_to_validate)
 
 
-def get_adv(adv_id: int) -> Adv:
-    adv = flask.request.session.get(Adv, adv_id)
-    if adv is None:
-        raise HttpError(404, "advertisement not found")
-    return adv
+def validate_params_to_edit(data_to_validate: Any):
+    return params_validator_to_edit.validate(data_to_validate)
 
 
-def add_adv(adv: Adv) -> Adv:
-    try:
-        request.session.add(adv)
-        request.session.commit()
-    except IntegrityError:
-        raise HttpError(409, "advertisement already exists")
-    return adv
-
-
-def delete_adv(adv: Adv) -> None:
-    try:
-        request.session.delete(adv)
-        request.session.commit()
-    except Exception:
-        raise HttpError(500, "unexpacted error occurred")
-
+def save(validated_data):
+    object_to_save = db_models.Adv(**validated_data)
+    return storage_interface.save(object_to_save)
