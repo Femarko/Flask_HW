@@ -26,7 +26,7 @@ class StorageInterface:
     def __init__(self, session: SQLAlchemySession):
         self.session = session
 
-    def save(self, validated_data: dict) -> int:
+    def add(self, validated_data: dict) -> int:
         object_to_save: DBModel = db_models.Adv(**validated_data)
         try:
             self.session.add(object_to_save)

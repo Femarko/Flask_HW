@@ -1,9 +1,10 @@
 from flask import jsonify, request, Response
 from flask.views import MethodView
 
-# from app.validation.data_validation import validate_data
-from app import service
-
+import app.db
+from app.domain import domain_model, domain_service
+from app.db import storage_interface
+from app.validation import params_validator_to_create
 
 class AdvView(MethodView):
 
@@ -20,8 +21,11 @@ class AdvView(MethodView):
     #     )
 
     def post(self) -> tuple[Response, int]:
-        validated_adv_data: dict[str, str] = service.validate_params_to_create(request.json)
-        new_adv_id = service.save(validated_adv_data)
+        # validated_adv_data: dict[str, str] = service.validate_params_to_create(request.json)
+        # new_adv_id = service.save(validated_adv_data)
+        validated_adv_data = params_validator_to_create.validate(data_to_validate=request.json)
+        adv_service_instance = domain_model.Advertisement(storage_repository=app.db.storage_interface)
+        new_adv_id = adv_service_instance.add_new(validated_adv_data)
         return jsonify({'id': new_adv_id}), 201
 
     # def patch(self, adv_id: int) -> tuple[Response, int]:
