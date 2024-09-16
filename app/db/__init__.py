@@ -9,8 +9,8 @@ POSTGRES_DSN = f"postgresql://{config.POSTGRES_USER}:{config.POSTGRES_PASSWORD}@
 
 engine = sqlalchemy.create_engine(POSTGRES_DSN)
 
-Session = sqlalchemy.orm.sessionmaker(bind=engine)
+# Session = sqlalchemy.orm.sessionmaker(bind=engine)
 
 db_models.Base.metadata.create_all(bind=engine)
 
-storage_interface = StorageInterface(session=Session())
+# storage_interface = StorageInterface(session=Session())

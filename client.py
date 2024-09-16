@@ -3,25 +3,25 @@
 import requests
 
 
-response = requests.post(
-    'http://127.0.0.1:5000/adv',
-    json={
-        "title": "twelve",
-        "description": "twelve",
-        "author": "twelve"
-    }
-)
-
-# response = requests.get('http://127.0.0.1:5000/adv/1')
-
-# response = requests.patch(
-#     'http://127.0.0.1:5000/adv/1',
+# response = requests.post(
+#     'http://127.0.0.1:5000/adv',
 #     json={
-#         "title": "totally new",
-#         # "description": "some moddescription",
-#         # "author": "newauthor"
+#         "title": "twenty five",
+#         "description": "twenty five",
+#         "author": "twenty five"
 #     }
 # )
+
+# response = requests.get('http://127.0.0.1:5000/adv/24')
+
+response = requests.patch(
+    'http://127.0.0.1:5000/adv/12',
+    json={
+        "title": "fifteen",
+        "description": "fifteen",
+        "author": "fifteen"
+    }
+)
 
 # response = requests.delete('http://127.0.0.1:5000/adv/1')
 

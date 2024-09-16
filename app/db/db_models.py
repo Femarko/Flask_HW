@@ -16,3 +16,13 @@ class Adv(Base):
     description: Mapped[str] = mapped_column(index=True, unique=False, nullable=False)
     creation_date: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     author: Mapped[str] = mapped_column(String(200))
+
+    def db_model_to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "creation_date": self.creation_date,
+            "author": self.author
+        }
+
