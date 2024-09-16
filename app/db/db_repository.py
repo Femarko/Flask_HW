@@ -8,7 +8,7 @@ from app.type_hints import SQLAlchemySession
 DBModel = TypeVar("DBModel", bound=Base)
 
 
-class StorageInterface:
+class DBRepository:
     def __init__(self, session: SQLAlchemySession, return_db_model: bool = False):
         self.session = session
 

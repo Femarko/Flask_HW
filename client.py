@@ -6,22 +6,22 @@ import requests
 # response = requests.post(
 #     'http://127.0.0.1:5000/adv',
 #     json={
-#         "title": "twenty five",
-#         "description": "twenty five",
-#         "author": "twenty five"
+#         "tile": "twenty six",
+#         "description": "twenty six",
+#         "author": "twenty six"
 #     }
 # )
 
-# response = requests.get('http://127.0.0.1:5000/adv/24')
+response = requests.get('http://127.0.0.1:5000/adv/26')
 
-response = requests.patch(
-    'http://127.0.0.1:5000/adv/12',
-    json={
-        "title": "fifteen",
-        "description": "fifteen",
-        "author": "fifteen"
-    }
-)
+# response = requests.patch(
+#     'http://127.0.0.1:5000/adv/12',
+#     json={
+#         "title": "fifteen",
+#         "description": "fifteen",
+#         "author": "fifteen"
+#     }
+# )
 
 # response = requests.delete('http://127.0.0.1:5000/adv/1')
 

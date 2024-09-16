@@ -1,7 +1,7 @@
 import typing, pydantic
 from typing import Type, TypeVar
 
-from app.db.db_interface import DBModel
+from app.db.db_repository import DBModel
 from app.domain.domain_interfaces import StorageInterface, ValidatorInterface
 
 PydanticModel = TypeVar("PydanticModel", bound=pydantic.BaseModel)
@@ -19,8 +19,8 @@ class Advertisement:
                                                                              new_data=new_data)
         return modified_advertisement
 
-    def get_one(self, *args, **kwargs):
-        return self.storage_repository.get_one(*args, **kwargs)
+    def get_one(self, advertisement_id: int, return_dict: bool = True):
+        return self.storage_repository.get_one(advertisement_id=advertisement_id)
 
     def get_sample(self, validated_filter_params: dict):
         return self.storage_repository.get_sample()

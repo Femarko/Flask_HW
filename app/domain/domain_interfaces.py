@@ -1,6 +1,6 @@
 import typing
 
-from app.db.db_interface import DBModel
+from app.db.db_repository import DBModel
 
 
 class StorageInterface(typing.Protocol):

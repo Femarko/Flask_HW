@@ -5,14 +5,17 @@ from flask.views import MethodView
 
 import app.db
 from app import error_handler
-from app.db.db_interface import DBModel
+from app.db.db_repository import DBModel
 from app.db.db_models import Adv
 from app.db.unit_of_work import UnitOfWork
 from app.domain import domain_operations
 # from app.db import storage_interface
-from app.db import StorageInterface, db_interface
-from app.domain import domain_models, domain_operations
+from app.db import DBRepository, db_repository
+from app.domain import domain_models, domain_operations, domain_interfaces
+from app.domain.domain_interfaces import StorageInterface
 from app.domain.domain_models import ValidationModel
+from app.domain.domain_operations import Advertisement
+from app.type_hints import SQLAlchemySession
 from app.validation import validation_interface
 from app.validation.validation_interface import ValidatorClass
 
@@ -27,12 +30,19 @@ def validate_data(data_to_validate: dict, validation_model: Type[ValidationModel
     return validation_result
 
 
+def get_domain_operation_instance(session: SQLAlchemySession) -> Advertisement:
+    db_repository_instance = db_repository.DBRepository(session=session)
+    domain_operation_instance = domain_operations.Advertisement(storage_repository=db_repository_instance)
+    return domain_operation_instance
+
+
 class AdvView(MethodView):
     def get(self, advertisement_id: int) -> Response:
         with UnitOfWork() as unit_of_work:
-            db_repository = db_interface.StorageInterface(session=unit_of_work.session)
-            domain_advertisement_instance = domain_operations.Advertisement(storage_repository=db_repository)
-            fetched_adv_params: dict | None = domain_advertisement_instance.get_one(advertisement_id)
+            domain_operation = get_domain_operation_instance(session=unit_of_work.session)
+            # db_repository = db_interface.DBRepository(session=unit_of_work.session)
+            # domain_advertisement_instance = domain_operations.Advertisement(storage_repository=db_repository)
+            fetched_adv_params: dict | None = domain_operation.get_one(advertisement_id=advertisement_id)
             if fetched_adv_params is None:
                 raise error_handler.HttpError(description="advertisement not found", status_code=404)
             return jsonify(fetched_adv_params)
@@ -41,9 +51,10 @@ class AdvView(MethodView):
         validated_data = validate_data(data_to_validate=request.json,
                                        validation_model=domain_models.validation_models.create_adv)
         with UnitOfWork() as unit_of_work:
-            db_repository = db_interface.StorageInterface(session=unit_of_work.session)
-            domain_operations_advertisement = domain_operations.Advertisement(storage_repository=db_repository)
-            new_adv: DBModel = domain_operations_advertisement.add(validated_data=validated_data)
+            # db_repository = db_interface.DBRepository(session=unit_of_work.session)
+            # domain_operations_advertisement = domain_operations.Advertisement(storage_repository=db_repository)
+            domain_operation = get_domain_operation_instance(session=unit_of_work.session)
+            new_adv: DBModel = domain_operation.add(validated_data=validated_data)
             unit_of_work.commit()
             return jsonify({'id': new_adv.id}), 201
 
@@ -51,9 +62,10 @@ class AdvView(MethodView):
         data_validation_result = validate_data(data_to_validate=request.json,
                                                validation_model=domain_models.validation_models.edit_adv)
         with UnitOfWork() as unit_of_work:
-            db_repository = db_interface.StorageInterface(unit_of_work.session)
-            domain_operations_advertisement = domain_operations.Advertisement(storage_repository=db_repository)
-            domain_operation_result: dict | None = domain_operations_advertisement.update(
+            # db_repository = db_interface.DBRepository(unit_of_work.session)
+            # domain_operations_advertisement = domain_operations.Advertisement(storage_repository=db_repository)
+            domain_operation = get_domain_operation_instance(session=unit_of_work.session)
+            domain_operation_result: dict | None = domain_operation.update(
                 advertisement_id=advertisement_id, new_data=data_validation_result
             )
             if domain_operation_result is None:
